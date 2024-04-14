@@ -1,18 +1,18 @@
 # mule_sftp_sample
 
 ##  コンパイル ＆ 実行可能war作成
-` mvn clean package`
+- ` mvn clean package` で `target/mule_sftp_sample-1.0.0-SNAPSHOT.war`を作成する。
 
 ## 実行
 1. 送信
 
 ```shell
-java -jar target/test-1.0.0-SNAPSHOT.war '{"file":"flow.xml", "name":"receiving", "conf":{"USER_NAME":"username", "USER_PASSWORD":"password", "SFTP_HOST":"sftp", "SFTP_PORT":""}}'
+java -jar target/mule_sftp_sample-1.0.0-SNAPSHOT.war '{"file":"flow.xml", "name":"receiving", "conf":{"USER_NAME":"username", "USER_PASSWORD":"password", "SFTP_HOST":"sftp", "SFTP_PORT":""}}'
 ```
 
 2.  受信
 ```shell
-java -jar target/test-1.0.0-SNAPSHOT.war '{"file":"flow.xml", "name":"receiving", "conf":{"USER_NAME":"username", "USER_PASSWORD":"password", "SFTP_HOST":"sftp", "SFTP_PORT":""}}'
+java -jar target/mule_sftp_sample-1.0.0-SNAPSHOT.war '{"file":"flow.xml", "name":"receiving", "conf":{"USER_NAME":"username", "USER_PASSWORD":"password", "SFTP_HOST":"sftp", "SFTP_PORT":""}}'
 ```
 3. 設定
    - **file** : muleファイル名
