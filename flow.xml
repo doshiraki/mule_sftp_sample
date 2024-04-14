@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:spring="http://www.springframework.org/schema/beans"
+    xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+    xmlns:file="http://www.mulesoft.org/schema/mule/file"
+    xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+        http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+        http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+
+    <spring:beans>
+        <spring:import resource="sftp-properties.xml" />
+    </spring:beans>
+    <file:connector name="file" pollingFrequency="86400000"/>
+    <sftp:connector name="sftp"/>
+    <vm:connector name="vmQueue" />
+
+    <file:endpoint name="input" path="${user.dir}/data"/>
+    <vm:endpoint name="mem" path="mymem"/>
+
+    <flow name="sending" initialState="stopped">
+        <file:inbound-endpoint ref="input"/>
+        <sftp:outbound-endpoint
+            address="sftp://${USER_NAME}:${USER_PASSWORD}@${SFTP_HOST}:${SFTP_PORT}/home/abc"
+            outputPattern="#[function:dateStamp].dat"/>
+    </flow>
+    <flow name="receiving" initialState="stopped">
+        <sftp:inbound-endpoint name="inboundEndpoint"
+            exchange-pattern="request-response"
+            address="sftp://${USER_NAME}:${USER_PASSWORD}@${SFTP_HOST}:${SFTP_PORT}/home/abc" />
+        <file:outbound-endpoint ref="input" />
+    </flow>
+</mule>
